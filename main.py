@@ -244,7 +244,7 @@ def callback_manager(call):
 🔑 **ACTIVATE CORE PASS**
 ━━━━━━━━━━━━━━━━━━━━
 Enter your activation key below.
-Format: `CORE-XXXXXX`
+Format: `PRIME-XXXXXX`
 ━━━━━━━━━━━━━━━━━━━━
             """, chat_id, mid, parse_mode="Markdown")
             bot.register_next_step_handler(msg, process_key_step, mid)
