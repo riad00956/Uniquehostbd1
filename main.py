@@ -17,8 +17,8 @@ from flask import Flask, render_template_string
 
 # ১. Configuration
 class Config:
-    TOKEN = os.environ.get('BOT_TOKEN', '8494225623:AAG_HRSHoBpt36bdeUvYJL4ONnh-2bf6BnY')
-    ADMIN_ID = int(os.environ.get('ADMIN_ID', 7832264582))
+    TOKEN = os.environ.get('BOT_TOKEN', '8521853646:AAGe8-ZWKR49MP2ZFSJ5H2EGADTedKqy78w')
+    ADMIN_ID = int(os.environ.get('ADMIN_ID', 8373846582))
     PROJECT_DIR = 'projects'
     DB_NAME = 'cyber_v2.db'
     PORT = int(os.environ.get('PORT', 10000))  # Render uses PORT environment variable
@@ -128,8 +128,8 @@ def main_menu(user_id):
     
     user = get_user(user_id)
     if not is_prime(user_id):
-        markup.add(types.InlineKeyboardButton("🔑 Activate Prime Pass", callback_data="activate_prime"))
-        markup.add(types.InlineKeyboardButton("ℹ️ Premium Features", callback_data="premium_info"))
+        markup.add(types.InlineKeyboardButton("🔑 Activate Core Pass", callback_data="activate_prime"))
+        markup.add(types.InlineKeyboardButton("ℹ️ Core Features", callback_data="premium_info"))
     else:
         markup.add(
             types.InlineKeyboardButton("📤 Upload Bot File", callback_data='upload'),
@@ -188,23 +188,24 @@ def welcome(message):
         bot.send_message(message.chat.id, "❌ Error loading user data. Please try again.")
         return
     
-    status = "PRIME 👑" if is_prime(uid) else "FREE 🆓"
+    status = "CORE 👑" if is_prime(uid) else "FREE 🆓"
     expiry = user[2] if user[2] else "Not Activated"
     
     text = f"""
-🤖 **ZEN BOT HOST v3.0.1**
-dev: @zerox6t9
-━━━━━━━━━━━━━━━━━━━━
+🤖 **UNIQUE HOST BD v1.1.0**
+dev: @zerox6t9 <--GET CORE 👑
+HOST: Asia 🌏 | data: orange 🍊 
+━━━━━━━━━━━━━━━━━━━━━━━━
 👤 **User:** @{username}
 🆔 **ID:** `{uid}`
 💎 **Status:** {status}
 📅 **Join Date:** {user[5]}
-━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━
 📊 **Account Details:**
-• Plan: {'Premium' if is_prime(uid) else 'Free'}
+• Plan: {'CORE' if is_prime(uid) else 'Free'}
 • File Limit: `{user[3]}` files
 • Expiry: {expiry}
-━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━
 """
     
     bot.send_message(message.chat.id, text, 
@@ -240,17 +241,17 @@ def callback_manager(call):
     try:
         if call.data == "activate_prime":
             msg = bot.edit_message_text("""
-🔑 **ACTIVATE PRIME PASS**
+🔑 **ACTIVATE CORE PASS**
 ━━━━━━━━━━━━━━━━━━━━
 Enter your activation key below.
-Format: `PRIME-XXXXXX`
+Format: `CORE-XXXXXX`
 ━━━━━━━━━━━━━━━━━━━━
             """, chat_id, mid, parse_mode="Markdown")
             bot.register_next_step_handler(msg, process_key_step, mid)
             
         elif call.data == "upload":
             if not is_prime(uid):
-                bot.answer_callback_query(call.id, "⚠️ Premium feature! Activate Prime first.")
+                bot.answer_callback_query(call.id, "⚠️ Core feature! Activate Core first.")
                 return
             msg = bot.edit_message_text("""
 📤 **UPLOAD BOT FILE**
@@ -264,7 +265,7 @@ Please send your Python (.py) bot file.
             
         elif call.data == "deploy_new":
             if not is_prime(uid):
-                bot.answer_callback_query(call.id, "⚠️ Premium feature!")
+                bot.answer_callback_query(call.id, "⚠️ Core feature!")
                 return
             show_available_files(call)
             
@@ -333,7 +334,7 @@ Please send your Python (.py) bot file.
 # Step-by-step Functions
 def gen_key_step1(call):
     msg = bot.edit_message_text("""
-🎫 **GENERATE PRIME KEY**
+🎫 **GENERATE CORE KEY**
 ━━━━━━━━━━━━━━━━━━━━
 Step 1/3: Enter duration in days
 Example: 7, 30, 90, 365
@@ -348,7 +349,7 @@ def gen_key_step2(message):
             raise ValueError
         bot.delete_message(message.chat.id, message.message_id)
         msg = bot.send_message(message.chat.id, f"""
-🎫 **GENERATE PRIME KEY**
+🎫 **GENERATE CORE KEY**
 ━━━━━━━━━━━━━━━━━━━━
 Step 2/3: Duration set to **{days} days**
 
@@ -400,7 +401,7 @@ def upload_file_step(message, old_mid):
     chat_id = message.chat.id
     
     if not is_prime(uid):
-        bot.edit_message_text("⚠️ **Premium Required**\n\nActivate Prime to upload files.", 
+        bot.edit_message_text("⚠️ **Core Required**\n\nActivate core to upload files.", 
                              chat_id, old_mid, reply_markup=main_menu(uid))
         return
     
@@ -945,7 +946,7 @@ def show_dashboard(call):
 📊 **USER DASHBOARD**
 ━━━━━━━━━━━━━━━━━━━━
 👤 **Account Info:**
-• Status: {'PRIME 👑' if is_prime(uid) else 'FREE 🆓'}
+• Status: {'CORE👑' if is_prime(uid) else 'FREE 🆓'}
 • File Limit: {user[3]} files
 • Expiry: {user[2] if user[2] else 'Not set'}
 ━━━━━━━━━━━━━━━━━━━━
@@ -1004,7 +1005,7 @@ def show_all_users(call):
 👥 **ALL USERS**
 ━━━━━━━━━━━━━━━━━━━━
 📊 **Total Users:** {total_count}
-👑 **Prime Users:** {prime_count}
+👑 **Core Users:** {prime_count}
 🆓 **Free Users:** {total_count - prime_count}
 ━━━━━━━━━━━━━━━━━━━━
 **Recent Users:**
@@ -1096,7 +1097,7 @@ def show_admin_stats(call):
 🌐 **Hosting Info:**
 • Platform: ULTIMATE FLOW 
 • Port: {Config.PORT}
-• Database: zenxq
+• Database: orange-print🍊
 ━━━━━━━━━━━━━━━━━━━━
 """
     
@@ -1133,7 +1134,7 @@ Only admin can access the system when enabled.
 
 def show_premium_info(call):
     text = """
-👑 **PREMIUM FEATURES**
+👑 **CORE FEATURES**
 ━━━━━━━━━━━━━━━━━━━━
 ✅ **Unlimited Bot Deployment**
 ✅ **Priority Support**
@@ -1144,13 +1145,13 @@ def show_premium_info(call):
 ✅ **24/7 Server Uptime**
 ✅ **No Ads**
 ━━━━━━━━━━━━━━━━━━━━
-💎 **Get Prime Today!**
-Click 'Activate Prime Pass' and enter your key.
+💎 **Get core Today!**
+Click 'Activate core Pass' and enter your key.
 ━━━━━━━━━━━━━━━━━━━━
 """
     
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("🔑 Activate Prime", callback_data="activate_prime"))
+    markup.add(types.InlineKeyboardButton("🔑 Activate Core", callback_data="activate_prime"))
     markup.add(types.InlineKeyboardButton("🏠 Main Menu", callback_data="back_main"))
     
     bot.edit_message_text(text, call.message.chat.id, call.message.message_id,
@@ -1169,7 +1170,7 @@ def show_settings(call):
 ━━━━━━━━━━━━━━━━━━━━
 👤 **Account Settings:**
 • User ID: `{uid}`
-• Status: {'Prime 👑' if is_prime(uid) else 'Free 🆓'}
+• Status: {'Core 👑' if is_prime(uid) else 'Free 🆓'}
 • File Limit: {user[3]} files
 ━━━━━━━━━━━━━━━━━━━━
 🔧 **Bot Settings:**
@@ -1180,6 +1181,11 @@ def show_settings(call):
 ⚠️ **Danger Zone:**
 • Delete Account
 • Reset Settings
+━━━━━━━━━━━━━━━━━━━━
+🌐 **Hosting Info:**
+• Platform: unauthorized ❌🐍
+• Port: {Config.PORT}
+• Database: orange-print🍊
 ━━━━━━━━━━━━━━━━━━━━
 """
     
@@ -1214,9 +1220,9 @@ def process_key_step(message, old_mid):
         conn.close()
         
         text = f"""
-✅ **PRIME ACTIVATED!**
+✅ **CORE ACTIVATED!**
 ━━━━━━━━━━━━━━━━━━━━
-🎉 Congratulations! You are now a Prime member.
+🎉 Congratulations! You are now a Core member.
 ━━━━━━━━━━━━━━━━━━━━
 📅 **Expiry:** {expiry_date}
 📦 **File Limit:** {limit} files
